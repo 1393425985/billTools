@@ -1,0 +1,22 @@
+directories:
+  output: pack
+  buildResources: build
+productName: billTools
+appId: com.bill.tool
+compression: store
+publish:
+  - provider: github
+    repo: 1393425985/billTools
+    owner: '1393425985'
+    host: github.com
+    protocol: https
+win:
+  icon: ./static/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  installerIcon: ./static/icon.ico
+  uninstallerIcon: ./static/icon.ico
+  installerHeaderIcon: ./static/icon.ico
+  createDesktopShortcut: true
+electronVersion: 5.0.3

@@ -1,0 +1,8 @@
+version: 1.0.1
+files:
+  - url: billtools-setup-1.0.1.exe
+    sha512: knNEqFOUToAJSbAMW2+AHZKvdSkHAwkLkT6Kzfcf/7gCVPgX2JSnfR6F8xavNiwXzneqjpIcnReqk8S5CASs0A==
+    size: 47190047
+path: billtools-setup-1.0.1.exe
+sha512: knNEqFOUToAJSbAMW2+AHZKvdSkHAwkLkT6Kzfcf/7gCVPgX2JSnfR6F8xavNiwXzneqjpIcnReqk8S5CASs0A==
+releaseDate: '2019-06-26T08:58:44.270Z'

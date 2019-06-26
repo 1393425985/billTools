@@ -79,7 +79,7 @@ export class PatchModal extends Component<
     const {
       project: { patchPath },
     } = this.props;
-    if (!this.state.url) {
+    if (!this.state.url && patchPath) {
       this.getSvnUrl(patchPath);
     }
   }

@@ -1,8 +1,14 @@
 const { app, BrowserWindow, globalShortcut } = require('electron');
+const { autoUpdater } = require('electron-updater');
+const package = require('./package.json');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
+// Windows平台的应用通知
+if (process.platform === 'win32') {
+  app.setAppUserModelId(package.build.appId);
+}
 const loadingParams = {
   show: false,
   width: 400,
@@ -30,10 +36,10 @@ let loadingScreen;
 
 function createWindow() {
   mainWindow = new BrowserWindow(mainParams);
-  mainWindow.setTitle(require('./package.json').name);
+  mainWindow.setTitle(package.name);
 
   // mainWindow.loadURL(`http://localhost:9000`);
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
   mainWindow.loadFile('dist/index.html');
 
   // mainWindow.once('ready-to-show');
@@ -42,6 +48,7 @@ function createWindow() {
     if (loadingScreen) {
       loadingScreen.close();
     }
+    updateHandle();
   });
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -61,6 +68,46 @@ function createLoadingScreen() {
   loadingScreen.webContents.on('did-finish-load', () => {
     loadingScreen.show();
   });
+}
+
+function updateHandle() {
+  const message = {
+    error: '检查更新出错',
+    checking: '正在检查更新……',
+    updateAva: '检测到新版本，正在下载……',
+    updateNotAva: '现在使用的就是最新版本，不用更新',
+  };
+  autoUpdater.setFeedURL('https://github.com/1393425985/billTools/tree/master/build/pack');
+  autoUpdater.on('error', function(error) {
+    console.log(message.error);
+  });
+  autoUpdater.on('checking-for-update', function() {
+    console.log(message.checking);
+  });
+  autoUpdater.on('update-available', function(info) {
+    console.log(message.updateAva);
+  });
+  autoUpdater.on('update-not-available', function(info) {
+    console.log(message.updateNotAva);
+  });
+
+  // 更新下载进度事件
+  autoUpdater.on('download-progress', function(progressObj) {
+    console.log(progressObj)
+  });
+  autoUpdater.on('update-downloaded', function(
+    event,
+    releaseNotes,
+    releaseName,
+    releaseDate,
+    updateUrl,
+    quitAndUpdate,
+  ) {
+    // autoUpdater.quitAndInstall();
+  });
+
+  //执行自动更新检查
+  autoUpdater.checkForUpdates();
 }
 
 // Electron 会在初始化后并准备

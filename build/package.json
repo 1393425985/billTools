@@ -1,13 +1,15 @@
 {
   "name": "billtools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack1": "electron-packager . test --win --out ./pack --arch=x64 --app-version=1.0.0 --electron-version=5.0.3",
     "pack": "electron-builder --dir",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major"
   },
   "author": "bill",
   "license": "ISC",
@@ -18,12 +20,22 @@
   "devDependencies": {
     "@types/electron": "^1.6.10",
     "electron": "^5.0.3",
-    "electron-builder": "^20.44.4"
+    "electron-builder": "^20.44.4",
+    "electron-updater": "^4.0.6"
   },
   "build": {
     "productName": "billTools",
     "appId": "com.bill.tool",
     "compression": "store",
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "1393425985/billTools",
+        "owner": "1393425985",
+        "host": "github.com",
+        "protocol": "https"
+      }
+    ],
     "directories": {
       "output": "pack"
     },

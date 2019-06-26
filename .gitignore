@@ -4,7 +4,6 @@
 /node_modules
 /build/dist
 /build/node_modules
-/build/pack
 
 # production
 /dist
