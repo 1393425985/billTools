@@ -1,0 +1,75 @@
+.wrap {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  color: #ddd;
+  button + button {
+    margin-left: 4px;
+  }
+  .pathWrap {
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    :global(.ant-breadcrumb-separator) {
+      color: #ddd;
+    }
+    .pathText {
+      transition: color 0.3s;
+      color: #ddd;
+      cursor: pointer;
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+  .body {
+    width: 100%;
+    height: 100%;
+    padding: 8px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .list {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      .item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin: 2px 0;
+        & > div {
+          &:first-child,
+          &:last-child {
+            width: 50%;
+            word-break: break-word;
+            display: flex;
+            justify-content: space-between;
+            button{
+                margin-left: 4px;
+            }
+          }
+          &:nth-child(2) {
+            flex-shrink: 0;
+            flex-grow: 0;
+            margin: 0 4px;
+            align-self: center;
+          }
+        }
+      }
+    }
+  }
+  .foot {
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}

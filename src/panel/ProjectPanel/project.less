@@ -1,0 +1,30 @@
+@import '~../../utils/utils.less';
+.wrap {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background: #fff;
+  .toolWrap {
+    width: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .listWrap {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    .href {
+      transition: color 0.3s;
+      cursor: pointer;
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+}

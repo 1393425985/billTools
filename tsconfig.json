@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "jsx": "react",
+    "lib": ["esnext", "dom"],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@*": ["src/*"]
+    },
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./src", "./typings.d.ts","node_modules/@types"],
+  "exclude": ["node_modules"]
+}

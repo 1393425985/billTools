@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: rgba(0, 21, 41, 0.9);
+      }
+
+      .firstScreen-wrap {
+        width: 40px;
+        height: 100%;
+        position: relative;
+        margin: 0 auto;
+        overflow: hidden;
+      }
+
+      .firstScreen-ball {
+        background-image: url('ava.jpg');
+        background-size: 100%;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        position: absolute;
+        animation: tantiao 0.5s cubic-bezier(0.1, 0.25, 0.1, 1) 0s infinite
+          alternate both;
+      }
+
+      .firstScreen-ballShadow {
+        animation: tantiao2 0.5s cubic-bezier(0.1, 0.25, 0.1, 1) 0s infinite
+          alternate both;
+        transform: scale(1, -1);
+      }
+
+      .firstScreen-ballShadow .firstScreen-shadow {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 21, 41, 1),
+          rgba(0, 21, 41, 1) 40%,
+          rgba(0, 21, 41, 0)
+        );
+      }
+
+      @keyframes tantiao {
+        from {
+          bottom: 40px;
+        }
+
+        to {
+          bottom: 120px;
+        }
+      }
+
+      @keyframes tantiao2 {
+        from {
+          bottom: 0px;
+          opacity: 1;
+        }
+
+        to {
+          bottom: -80px;
+          opacity: 0.4;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="firstScreen-wrap">
+      <div class="firstScreen-ball"></div>
+      <div class="firstScreen-ball firstScreen-ballShadow">
+        <div class="firstScreen-shadow"></div>
+      </div>
+    </div>
+  </body>
+</html>
