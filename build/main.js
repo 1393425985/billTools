@@ -77,7 +77,7 @@ function updateHandle() {
     updateAva: '检测到新版本，正在下载……',
     updateNotAva: '现在使用的就是最新版本，不用更新',
   };
-  autoUpdater.setFeedURL('https://github.com/1393425985/billTools/tree/master/build/pack');
+  autoUpdater.setFeedURL('https://api.github.com/repos/1393425985/billTools/releases');
   autoUpdater.on('error', function(error) {
     console.log(message.error);
   });
