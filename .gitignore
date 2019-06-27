@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/config.json
 /build/dist
 /build/node_modules
 /build/pack

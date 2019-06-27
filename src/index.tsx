@@ -37,6 +37,9 @@ getConfig().then(rs => {
     writeConfig(store.getState());
   }
 });
-ipcRenderer.on('checkVersionStatus',(e,d)=>{
-  console.log(11111,d);
+ipcRenderer.on('checkVersionStatus',(e,data)=>{
+  store.dispatch({
+    type: 'version/update',
+    payload: data,
+  });
 });

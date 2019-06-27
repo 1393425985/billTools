@@ -1,14 +1,21 @@
-const { app, BrowserWindow, globalShortcut, dialog,ipcMain } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  globalShortcut,
+  dialog,
+  ipcMain,
+} = require('electron');
 const { autoUpdater } = require('electron-updater');
+const request = require('request');
 const package = require('./package.json');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
 // Windows平台的应用通知
-if (process.platform === 'win32') {
-  app.setAppUserModelId(package.build.appId);
-}
+// if (process.platform === 'win32') {
+//   app.setAppUserModelId(package.build.appId);
+// }
 const loadingParams = {
   show: false,
   width: 400,
@@ -38,9 +45,9 @@ function createWindow() {
   mainWindow = new BrowserWindow(mainParams);
   mainWindow.setTitle(package.name);
 
-  mainWindow.loadURL(`http://localhost:9000`);
-  mainWindow.webContents.openDevTools();
-  // mainWindow.loadFile('dist/index.html');
+  // mainWindow.loadURL(`http://localhost:9000`);
+  // mainWindow.webContents.openDevTools();
+  mainWindow.loadFile('dist/index.html');
 
   // mainWindow.once('ready-to-show');
   mainWindow.webContents.on('did-finish-load', () => {
@@ -96,70 +103,107 @@ app.on('activate', () => {
   }
 });
 
-function attachCheckVersionEvents(){
-  autoUpdater.setFeedURL(
-    `https://github.com/1393425985/billTools/releases/download/${
-      package.version
-    }/`,
-  );
-  // 检查更新失败
-  autoUpdater.on('error', error => {
+function attachCheckVersionEvents() {
+  // "https://api.github.com/repos/1393425985/billTools/releases/latest"
+  const readyUpdate = isNeedEvent => {
     mainWindow.webContents.send('checkVersionStatus', {
-      step:0
+      step: 1,
     });
-  });
-  // 检查更新
-  autoUpdater.on('checking-for-update', () => {
-    mainWindow.webContents.send('checkVersionStatus', {
-      step:1
-    });
-  });
-  // 开始下载
-  autoUpdater.on('update-available', info => {
-    mainWindow.webContents.send('checkVersionStatus', {
-      step:2,
-      progress: 0
-    });
-  });
-  // 无需更新
-  autoUpdater.on('update-not-available', info => {
-    mainWindow.webContents.send('checkVersionStatus', {
-      step:2,
-      progress: undefined
-    });
-  });
-  // 下载进度
-  autoUpdater.on('download-progress', progressObj => {
-    mainWindow.webContents.send('checkVersionStatus', {
-      step:2,
-      progress: progressObj
-    });
-  });
-  // 下载完成
-  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-    mainWindow.webContents.send('checkVersionStatus', {
-      step:3,
-    });
-    const dialogOpts = {
-      type: 'info',
-      buttons: ['立即重启', '稍后'],
-      title: '应用更新',
-      message: process.platform === 'win32' ? releaseNotes : releaseName,
-      detail: '新版安装包已下载，是否立即重启应用更新？',
-    };
+    request(
+      {
+        url:
+          'https://api.github.com/repos/1393425985/billTools/releases/latest',
+        method: 'GET',
+        strictSSL: false,
+        timeout: 200000,
+        headers: {
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
+        },
+        body: undefined,
+      },
+      (err, response, body) => {
+        if (err) {
+          mainWindow.webContents.send('checkVersionStatus', {
+            step: 0,
+            progress: undefined,
+            msg: err,
+          });
+        } else {
+          autoUpdater.setFeedURL(
+            `https://github.com/1393425985/billTools/releases/download/${
+              JSON.parse(body).tag_name
+            }/`,
+          );
+          if (isNeedEvent) {
+            // 检查更新失败
+            autoUpdater.on('error', (e, error) => {
+              mainWindow.webContents.send('checkVersionStatus', {
+                step: 0,
+                progress: undefined,
+                msg: error,
+              });
+            });
+            // 检查更新
+            autoUpdater.on('checking-for-update', () => {});
+            // 开始下载
+            autoUpdater.on('update-available', info => {
+              mainWindow.webContents.send('checkVersionStatus', {
+                step: 2,
+                progress: 0,
+              });
+            });
+            // 无需更新
+            autoUpdater.on('update-not-available', info => {
+              mainWindow.webContents.send('checkVersionStatus', {
+                step: 2,
+                progress: undefined,
+              });
+            });
+            // 下载进度
+            autoUpdater.on('download-progress', progressObj => {
+              mainWindow.webContents.send('checkVersionStatus', {
+                step: 2,
+                progress: progressObj.percent,
+              });
+            });
+            // 下载完成
+            autoUpdater.on(
+              'update-downloaded',
+              (event, releaseNotes, releaseName) => {
+                mainWindow.webContents.send('checkVersionStatus', {
+                  step: 3,
+                  progress: undefined,
+                });
+                const dialogOpts = {
+                  type: 'info',
+                  buttons: ['立即重启', '稍后'],
+                  title: '应用更新',
+                  message:
+                    process.platform === 'win32' ? releaseNotes : releaseName,
+                  detail: '新版安装包已下载，是否立即重启应用更新？',
+                };
 
-    dialog.showMessageBox(dialogOpts, response => {
-      if (response === 0){
-        // autoUpdater.quitAndInstall();
-      } 
-    });
-  });
-  autoUpdater.checkForUpdates();
+                dialog.showMessageBox(dialogOpts, response => {
+                  if (response === 0) {
+                    autoUpdater.quitAndInstall();
+                  }
+                });
+              },
+            );
+          }
+
+          autoUpdater.checkForUpdates();
+        }
+      },
+    );
+  };
+
+  readyUpdate(true);
   ipcMain.on('checkVersion', (e, arg) => {
-    autoUpdater.checkForUpdates();
+    readyUpdate(false);
   });
 }
-
 
 // 在这个文件中，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。

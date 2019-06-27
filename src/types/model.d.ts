@@ -10,6 +10,10 @@ declare namespace ModelTypes {
     };
   }
   export interface model {
+    version: {
+      step: 0 | 1 | 2 | 3;
+      progress: number;
+    };
     project: {
       packageCode: 'yarn' | 'npm';
       svnDays: number;

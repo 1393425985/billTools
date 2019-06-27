@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Input, InputNumber, Radio, AutoComplete } from 'antd';
+import { Button, Input, InputNumber, Radio, AutoComplete,notification,Progress  } from 'antd';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import classnames from 'classnames';
@@ -7,9 +7,9 @@ import $ from 'jquery';
 import { getFile } from '@utils/utils';
 import { apiTransfer } from '@services/api';
 import s, { IConfigLess } from './config.less';
-const pkg = require('../../../package.json');
+const pkg = require('../../../build/package.json');
 
-const { remote } = require('electron');
+const { remote,ipcRenderer  } = require('electron');
 const path = require('path');
 
 const styles = s as Partial<IConfigLess>;
@@ -17,6 +17,7 @@ const styles = s as Partial<IConfigLess>;
 
 interface ConfigStateProps {
   project: ModelTypes.model['project'];
+  version: ModelTypes.model['version'];
 }
 interface ConfigDispatchProps {
   dispatch: Dispatch;
@@ -47,6 +48,21 @@ export class ConfigModal extends Component<
       autoComplete,
     });
   }
+  componentWillReceiveProps(nextProps:Partial<ConfigModalProps>){
+    if(nextProps.version.step!==this.props.version.step){
+      if(nextProps.version.step===0){
+        notification.error({
+          message: '更新失败',
+          description: '请稍后再试',
+        });
+      }else if(nextProps.version.step===2 && nextProps.version.progress===undefined){
+        notification.success({
+          message: '当前为最新版本',
+          description: '请稍后再试',
+        });
+      }
+    }
+  }
   onChangeProject = (key, value) => {
     const { dispatch } = this.props;
     dispatch({
@@ -66,9 +82,13 @@ export class ConfigModal extends Component<
   onSearch = v => {
     location.href = `#${this.autoCompleteMap[v]}`;
   };
+  onCheckUpdate = ()=>{
+    ipcRenderer.send('checkVersion');
+  }
   render() {
     const {
       project: { svnDays, packageCode },
+      version:{step,progress}
     } = this.props;
     const { autoComplete } = this.state;
     return (
@@ -86,8 +106,9 @@ export class ConfigModal extends Component<
           <label className={styles.title} htmlFor="">
             版本 {pkg.version}
           </label>
-          <div className={styles.block}>
-            <Button>检查更新</Button>
+          <div>
+            <Button loading={progress!==undefined || step===1} onClick={this.onCheckUpdate}>{step===1?'正在检查更新':progress!==undefined?'正在下载更新':'检查更新'}</Button>
+            {progress&&<Progress percent={Number(progress.toFixed(0))} status="active" />}
           </div>
         </div>
         <div id="project" data-name="项目" className={styles.block}>
@@ -128,6 +149,7 @@ export class ConfigModal extends Component<
 export default connect<ConfigStateProps, ConfigDispatchProps, ConfigOwnProps>(
   (state: ModelTypes.model) => ({
     project: state.project,
+    version: state.version
   }),
   null,
   null,
