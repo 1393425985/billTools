@@ -12,6 +12,7 @@ import rootSaga from './sagas';
 import MenuPanel from '@panel/MenuPanel';
 import { getConfig,writeConfig } from '@utils/utils';
 
+const {ipcRenderer} = require('electron');
 const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(
   combineReducers({
@@ -35,4 +36,7 @@ getConfig().then(rs => {
   }else{
     writeConfig(store.getState());
   }
+});
+ipcRenderer.on('checkVersionStatus',(e,d)=>{
+  console.log(11111,d);
 });

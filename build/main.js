@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, dialog,ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const package = require('./package.json');
 
@@ -38,9 +38,9 @@ function createWindow() {
   mainWindow = new BrowserWindow(mainParams);
   mainWindow.setTitle(package.name);
 
-  // mainWindow.loadURL(`http://localhost:9000`);
+  mainWindow.loadURL(`http://localhost:9000`);
   mainWindow.webContents.openDevTools();
-  mainWindow.loadFile('dist/index.html');
+  // mainWindow.loadFile('dist/index.html');
 
   // mainWindow.once('ready-to-show');
   mainWindow.webContents.on('did-finish-load', () => {
@@ -48,7 +48,7 @@ function createWindow() {
     if (loadingScreen) {
       loadingScreen.close();
     }
-    updateHandle();
+    attachCheckVersionEvents();
   });
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -68,46 +68,6 @@ function createLoadingScreen() {
   loadingScreen.webContents.on('did-finish-load', () => {
     loadingScreen.show();
   });
-}
-
-function updateHandle() {
-  const message = {
-    error: '检查更新出错',
-    checking: '正在检查更新……',
-    updateAva: '检测到新版本，正在下载……',
-    updateNotAva: '现在使用的就是最新版本，不用更新',
-  };
-  autoUpdater.setFeedURL('https://api.github.com/repos/1393425985/billTools/releases');
-  autoUpdater.on('error', function(error) {
-    console.log(message.error);
-  });
-  autoUpdater.on('checking-for-update', function() {
-    console.log(message.checking);
-  });
-  autoUpdater.on('update-available', function(info) {
-    console.log(message.updateAva);
-  });
-  autoUpdater.on('update-not-available', function(info) {
-    console.log(message.updateNotAva);
-  });
-
-  // 更新下载进度事件
-  autoUpdater.on('download-progress', function(progressObj) {
-    console.log(progressObj)
-  });
-  autoUpdater.on('update-downloaded', function(
-    event,
-    releaseNotes,
-    releaseName,
-    releaseDate,
-    updateUrl,
-    quitAndUpdate,
-  ) {
-    // autoUpdater.quitAndInstall();
-  });
-
-  //执行自动更新检查
-  autoUpdater.checkForUpdates();
 }
 
 // Electron 会在初始化后并准备
@@ -135,6 +95,71 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+function attachCheckVersionEvents(){
+  autoUpdater.setFeedURL(
+    `https://github.com/1393425985/billTools/releases/download/${
+      package.version
+    }/`,
+  );
+  // 检查更新失败
+  autoUpdater.on('error', error => {
+    mainWindow.webContents.send('checkVersionStatus', {
+      step:0
+    });
+  });
+  // 检查更新
+  autoUpdater.on('checking-for-update', () => {
+    mainWindow.webContents.send('checkVersionStatus', {
+      step:1
+    });
+  });
+  // 开始下载
+  autoUpdater.on('update-available', info => {
+    mainWindow.webContents.send('checkVersionStatus', {
+      step:2,
+      progress: 0
+    });
+  });
+  // 无需更新
+  autoUpdater.on('update-not-available', info => {
+    mainWindow.webContents.send('checkVersionStatus', {
+      step:2,
+      progress: undefined
+    });
+  });
+  // 下载进度
+  autoUpdater.on('download-progress', progressObj => {
+    mainWindow.webContents.send('checkVersionStatus', {
+      step:2,
+      progress: progressObj
+    });
+  });
+  // 下载完成
+  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+    mainWindow.webContents.send('checkVersionStatus', {
+      step:3,
+    });
+    const dialogOpts = {
+      type: 'info',
+      buttons: ['立即重启', '稍后'],
+      title: '应用更新',
+      message: process.platform === 'win32' ? releaseNotes : releaseName,
+      detail: '新版安装包已下载，是否立即重启应用更新？',
+    };
+
+    dialog.showMessageBox(dialogOpts, response => {
+      if (response === 0){
+        // autoUpdater.quitAndInstall();
+      } 
+    });
+  });
+  autoUpdater.checkForUpdates();
+  ipcMain.on('checkVersion', (e, arg) => {
+    autoUpdater.checkForUpdates();
+  });
+}
+
 
 // 在这个文件中，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。

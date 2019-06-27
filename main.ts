@@ -1,9 +1,10 @@
-const { app, BrowserWindow, globalShortcut,Menu  } = require('electron');
+const { app, BrowserWindow, globalShortcut, dialog,ipcMain } = require('electron');
+const package = require('./build/package.json');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
-let loadingParams = {
+const loadingParams = {
   show: false,
   width: 400,
   height: 200,
@@ -14,7 +15,7 @@ let loadingParams = {
     nodeIntegration: true,
   },
 };
-let mainParams = {
+const mainParams = {
   // icon: __dirname + '/icon.png',
   show: false,
   width: 1200,
@@ -30,7 +31,7 @@ let loadingScreen;
 
 function createWindow() {
   mainWindow = new BrowserWindow(mainParams);
-  mainWindow.setTitle(require('./package.json').name);
+  mainWindow.setTitle(package.name);
 
   mainWindow.loadURL(`http://localhost:9000`);
   mainWindow.webContents.openDevTools();
@@ -61,11 +62,6 @@ function createLoadingScreen() {
   loadingScreen.webContents.on('did-finish-load', () => {
     loadingScreen.show();
   });
-}
-
-function createMenu() {
-  // const menu = Menu.buildFromTemplate(menuTemplate);
-  // Menu.setApplicationMenu(menu);
 }
 
 // Electron 会在初始化后并准备

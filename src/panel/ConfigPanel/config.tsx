@@ -7,6 +7,7 @@ import $ from 'jquery';
 import { getFile } from '@utils/utils';
 import { apiTransfer } from '@services/api';
 import s, { IConfigLess } from './config.less';
+const pkg = require('../../../package.json');
 
 const { remote } = require('electron');
 const path = require('path');
@@ -80,6 +81,14 @@ export class ConfigModal extends Component<
             onSearch={this.onChangeSearch}
             placeholder="Search..."
           />
+        </div>
+        <div id="version" data-name="版本" className={styles.block}>
+          <label className={styles.title} htmlFor="">
+            版本 {pkg.version}
+          </label>
+          <div className={styles.block}>
+            <Button>检查更新</Button>
+          </div>
         </div>
         <div id="project" data-name="项目" className={styles.block}>
           <label className={styles.title} htmlFor="">
