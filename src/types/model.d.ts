@@ -10,8 +10,15 @@ declare namespace ModelTypes {
     };
   }
   export interface colorItem {
-    color:string;
-    name:string;
+    color: string;
+    name: string;
+  }
+  export interface bezierItem {
+    name: string;
+    info: {
+      x: number;
+      y: number;
+    }[];
   }
   export interface model {
     version: {
@@ -24,8 +31,11 @@ declare namespace ModelTypes {
       patchPath: string;
       list: projectItem[];
     };
-    color:{
-      list: colorItem[]
-    }
+    color: {
+      list: colorItem[];
+    };
+    bezier: {
+      list: bezierItem[];
+    };
   }
 }

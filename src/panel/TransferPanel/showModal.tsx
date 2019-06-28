@@ -18,7 +18,7 @@ export default class ShowModal extends Component<
   state = {
     show: false,
   };
-  option = defaultOption;
+  private option = defaultOption;
   public show(option: Partial<typeof defaultOption>) {
     Object.assign(this.option, option);
     this.setState({

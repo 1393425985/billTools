@@ -38,6 +38,10 @@ getConfig().then(rs => {
       type: 'color/update',
       payload: rs.color || defaultStore.color,
     });
+    store.dispatch({
+      type: 'bezier/update',
+      payload: rs.bezier || defaultStore.bezier,
+    });
   }else{
     writeConfig(defaultStore);
   }

@@ -72,9 +72,9 @@ export class PatchModal extends Component<
     url: '',
     exportSpinner: false,
   };
-  x2js = new X2JS();
-  searchInput = createRef<Input>();
-  fromPath: string = '';
+  private x2js = new X2JS();
+  private searchInput = createRef<Input>();
+  private fromPath: string = '';
   componentDidUpdate() {
     const {
       project: { patchPath },

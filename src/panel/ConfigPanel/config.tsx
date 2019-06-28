@@ -35,8 +35,8 @@ export class ConfigModal extends Component<
   state = {
     autoComplete: [],
   };
-  autoCompleteSource: string[] = [];
-  autoCompleteMap: { [key: string]: string } = {};
+  private autoCompleteSource: string[] = [];
+  private autoCompleteMap: { [key: string]: string } = {};
   componentDidMount() {
     const autoComplete = [];
     $(`.${styles.wrap} .${styles.block}`).each((i, dom) => {
@@ -63,7 +63,7 @@ export class ConfigModal extends Component<
       }
     }
   }
-  onChangeProject = (key, value) => {
+  private onChangeProject = (key, value) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'project/update',
@@ -72,17 +72,17 @@ export class ConfigModal extends Component<
       },
     });
   };
-  onChangeSearch = v => {
+  private onChangeSearch = v => {
     this.setState({
       autoComplete: this.autoCompleteSource.filter(
         s => s.toLocaleLowerCase().indexOf(v.toLocaleLowerCase()) > -1,
       ),
     });
   };
-  onSearch = v => {
+  private onSearch = v => {
     location.href = `#${this.autoCompleteMap[v]}`;
   };
-  onCheckUpdate = ()=>{
+  private onCheckUpdate = ()=>{
     ipcRenderer.send('checkVersion');
   }
   render() {

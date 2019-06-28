@@ -43,14 +43,14 @@ export class ColorModal extends Component<
       this.props.color && this.props.color.list && this.props.color.list[0],
     primaryColorInstance: undefined,
   };
-  colorNameIpt = createRef<Input>();
+  private colorNameIpt = createRef<Input>();
   componentDidUpdate() {
     const { selectedItem } = this.state;
     if (this.colorNameIpt.current && selectedItem) {
       this.colorNameIpt.current.input.value = selectedItem.name;
     }
   }
-  onSelectedChange = selectedIndex => {
+  private onSelectedChange = selectedIndex => {
     const {
       color: { list },
     } = this.props;
@@ -59,7 +59,7 @@ export class ColorModal extends Component<
       selectedItem: list[selectedIndex],
     });
   };
-  onColorNameChange = e => {
+  private onColorNameChange = e => {
     const { selectedItem, selectedIndex } = this.state;
     const newItem = Object.assign({}, selectedItem, {
       name: e.target.value ? e.target.value : `custom_${selectedIndex}`,
@@ -68,7 +68,7 @@ export class ColorModal extends Component<
       selectedItem: newItem,
     });
   };
-  onColorChange = color => {
+  private onColorChange = color => {
     const { hex } = color;
     const { selectedItem } = this.state;
     const newItem = Object.assign({}, selectedItem, {
@@ -79,10 +79,10 @@ export class ColorModal extends Component<
       primaryColorInstance: color,
     });
   };
-  onColorCopy = (color)=>{
+  private onColorCopy = (color)=>{
     clipboard.writeText(color);
   }
-  onSave = () => {
+  private onSave = () => {
     const {
       dispatch,
       color: { list },
@@ -97,7 +97,7 @@ export class ColorModal extends Component<
       },
     });
   };
-  renderColorValidation() {
+  private renderColorValidation() {
     const { primaryColorInstance } = this.state;
     let text = '';
     if (primaryColorInstance) {

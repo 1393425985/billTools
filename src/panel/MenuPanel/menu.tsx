@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, Icon } from 'antd';
 import ProjectPanel from '../ProjectPanel';
 import ColorPanel from '../ColorPanel';
-// import ClipboardPanel from '../ClipboardPanel';
+import BezierPanel from '../BezierPanel';
 import ConfigPanel from '../ConfigPanel';
 import TransferPanel from '../TransferPanel';
 import s, { IMenuLess } from './menu.less';
@@ -32,7 +32,7 @@ export default function() {
           </Menu.Item>
           <Menu.Item key="3">
             <Icon type="inbox" />
-            <span>快捷粘贴</span>
+            <span>贝塞尔</span>
           </Menu.Item>
           <Menu.Item key="4">
             <Icon type="appstore" />
@@ -47,7 +47,7 @@ export default function() {
       <div>
         {selectedKeys.includes('1') && <ProjectPanel />}
         {selectedKeys.includes('2') && <ColorPanel />}
-        {/* {selectedKeys.includes('3') && <ClipboardPanel />} */}
+        {selectedKeys.includes('3') && <BezierPanel />}
         {selectedKeys.includes('4') && <TransferPanel />}
         {selectedKeys.includes('99') && <ConfigPanel />}
       </div>

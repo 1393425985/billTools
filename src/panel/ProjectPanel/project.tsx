@@ -50,8 +50,8 @@ class Project extends Component<ProjectProps, ProjectState> {
   state = {
     search: '',
   };
-  cmdModal = createRef<CmdModal>();
-  patchModal = createRef<PatchModal>();
+  private cmdModal = createRef<CmdModal>();
+  private patchModal = createRef<PatchModal>();
   private onAdd = e => {
     const { dispatch } = this.props;
     dialog.showOpenDialog(
