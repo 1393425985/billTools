@@ -1,0 +1,57 @@
+@import '~../../utils/colors.less';
+.wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 16px;
+  & > .left {
+    width: calc(~'100% - 400px');
+    height: 100%;
+    .block {
+      &:not(:first-child) {
+        margin-top: 8px;
+      }
+    }
+    .primaryColorText {
+      height: 18px;
+      line-height: 18px;
+      width: 100%;
+      color: red;
+    }
+  }
+  & > .right {
+    width: 400px;
+    height: 100%;
+    .colorWrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      .colorItem {
+        width: 94%;
+        height: 40px;
+        color: #fff;
+        line-height: 40px;
+        padding: 0 16px;
+        transition: all 0.2s;
+        cursor: pointer;
+        &:first-child {
+          border-radius: 4px 4px 0 0;
+        }
+        &:last-child {
+          border-radius: 0 0 4px 4px;
+        }
+        .colorHover {
+          float: right;
+          display: none;
+        }
+        &:hover {
+          width: 100%;
+          .colorHover {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}

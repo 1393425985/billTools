@@ -7,7 +7,7 @@ const {
 } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const request = require('request');
-const package = require('./package.json');
+const pkg = require('./package.json');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -43,7 +43,7 @@ let loadingScreen;
 
 function createWindow() {
   mainWindow = new BrowserWindow(mainParams);
-  mainWindow.setTitle(package.name);
+  mainWindow.setTitle(pkg.name);
 
   // mainWindow.loadURL(`http://localhost:9000`);
   // mainWindow.webContents.openDevTools();
@@ -147,14 +147,14 @@ function attachCheckVersionEvents() {
             // 检查更新
             autoUpdater.on('checking-for-update', () => {});
             // 开始下载
-            autoUpdater.on('update-available', info => {
+            autoUpdater.on('update-available', () => {
               mainWindow.webContents.send('checkVersionStatus', {
                 step: 2,
                 progress: 0,
               });
             });
             // 无需更新
-            autoUpdater.on('update-not-available', info => {
+            autoUpdater.on('update-not-available', () => {
               mainWindow.webContents.send('checkVersionStatus', {
                 step: 2,
                 progress: undefined,
@@ -184,8 +184,8 @@ function attachCheckVersionEvents() {
                   detail: '新版安装包已下载，是否立即重启应用更新？',
                 };
 
-                dialog.showMessageBox(dialogOpts, response => {
-                  if (response === 0) {
+                dialog.showMessageBox(dialogOpts, rs => {
+                  if (rs === 0) {
                     autoUpdater.quitAndInstall();
                   }
                 });

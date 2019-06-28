@@ -9,6 +9,10 @@ declare namespace ModelTypes {
       cmd: string[];
     };
   }
+  export interface colorItem {
+    color:string;
+    name:string;
+  }
   export interface model {
     version: {
       step: 0 | 1 | 2 | 3;
@@ -20,5 +24,8 @@ declare namespace ModelTypes {
       patchPath: string;
       list: projectItem[];
     };
+    color:{
+      list: colorItem[]
+    }
   }
 }

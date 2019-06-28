@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, Icon } from 'antd';
 import ProjectPanel from '../ProjectPanel';
-// import ColorPanel from '../ColorPanel';
+import ColorPanel from '../ColorPanel';
 // import ClipboardPanel from '../ClipboardPanel';
 import ConfigPanel from '../ConfigPanel';
 import TransferPanel from '../TransferPanel';
@@ -46,7 +46,7 @@ export default function() {
       </div>
       <div>
         {selectedKeys.includes('1') && <ProjectPanel />}
-        {/* {selectedKeys.includes('2') && <ColorPanel />} */}
+        {selectedKeys.includes('2') && <ColorPanel />}
         {/* {selectedKeys.includes('3') && <ClipboardPanel />} */}
         {selectedKeys.includes('4') && <TransferPanel />}
         {selectedKeys.includes('99') && <ConfigPanel />}

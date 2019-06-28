@@ -28,13 +28,18 @@ render(
   document.getElementById('root'),
 );
 getConfig().then(rs => {
+  const defaultStore = store.getState();
   if (rs) {
     store.dispatch({
       type: 'project/update',
-      payload: rs.project,
+      payload: rs.project || defaultStore.project,
+    });
+    store.dispatch({
+      type: 'color/update',
+      payload: rs.color || defaultStore.color,
     });
   }else{
-    writeConfig(store.getState());
+    writeConfig(defaultStore);
   }
 });
 ipcRenderer.on('checkVersionStatus',(e,data)=>{

@@ -57,7 +57,17 @@ module.exports = merge(common, {
       {
         test: /\.global\.less$/,
         exclude: [path.resolve(__dirname, 'node_modules')],
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+            },
+          },
+        ],
         include: path.resolve(__dirname, 'src'),
       },
       {
@@ -67,7 +77,12 @@ module.exports = merge(common, {
           'style-loader',
           typingsForCssModulesLoaderConf,
           'postcss-loader',
-          'less-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+            },
+          },
         ],
         include: path.resolve(__dirname, 'src'),
       },
