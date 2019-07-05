@@ -1,13 +1,15 @@
+import { writeConfig } from '@utils/utils';
 const NAMESPACE = 'bezier';
 const initialState: BezierTypes.model = {
-  list:[{
-      name:'default',
-      info:[]
-  }]
+  list: new Array(9).fill(0).map((v, i) => ({
+    name: `default_${i + 1}`,
+    info: [],
+  })),
 };
 const ACTION_HANDLERS = {
   update(state, action) {
     const newState = { ...state, ...action.payload };
+    writeConfig({ bezier: newState });
     return newState;
   },
 };
