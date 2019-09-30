@@ -50,10 +50,21 @@ module.exports = {
         test: /\.js$/,
         use: {
           loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          },
         },
         exclude: '/node_modules/',
       },
       { test: /\.tsx?$/, loader: 'ts-loader' },
+      // {
+      //   test: /\.worker\.js$/,
+      //   use: { loader: 'worker-loader' },
+      // },
+      // {
+      //   test: /\.worker\.ts$/,
+      //   use: { loader: 'worker-loader' },
+      // },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader'],

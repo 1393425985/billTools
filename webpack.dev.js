@@ -19,8 +19,11 @@ module.exports = merge(common, {
   output: {
     filename: '[name].[hash].js',
     path: path.resolve(__dirname, 'build/dist'),
+    globalObject:'this',
   },
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
+  devtool: 'eval',
+
   devServer: {
     contentBase: '.build/dist',
     compress: true,

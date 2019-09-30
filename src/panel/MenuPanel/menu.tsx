@@ -5,6 +5,7 @@ import ColorPanel from '../ColorPanel';
 import BezierPanel from '../BezierPanel';
 import ConfigPanel from '../ConfigPanel';
 import TransferPanel from '../TransferPanel';
+import ChartPanel from '../ChartPanel';
 import s, { IMenuLess } from './menu.less';
 const styles = s as Partial<IMenuLess>;
 
@@ -38,6 +39,10 @@ export default function() {
             <Icon type="appstore" />
             <span>国际化</span>
           </Menu.Item>
+          <Menu.Item key="5">
+            <Icon type="desktop" />
+            <span>图表</span>
+          </Menu.Item>
           <Menu.Item key="99">
             <Icon type="setting" />
             <span>设置</span>
@@ -49,6 +54,7 @@ export default function() {
         {selectedKeys.includes('2') && <ColorPanel />}
         {selectedKeys.includes('3') && <BezierPanel />}
         {selectedKeys.includes('4') && <TransferPanel />}
+        {selectedKeys.includes('5') && <ChartPanel />}
         {selectedKeys.includes('99') && <ConfigPanel />}
       </div>
     </div>
