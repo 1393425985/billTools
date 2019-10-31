@@ -65,7 +65,7 @@ ctx.addEventListener('message', event => {
     i < n;
     i += 1
   ) {
-    ctx.postMessage({ type: 'tick', progress: i / n });
+    ctx.postMessage({ type: 'tick', progress: i / n,nodes, links });
     simulation.tick();
   }
   ctx.postMessage({ type: 'end', nodes, links });

@@ -15,6 +15,7 @@ interface CanvasManageOption {
     links: { id?: string; source: string; target: string }[];
   };
   d3Option?: SVGManageOption['d3Option'],
+  showLogic?: boolean;
   onTick:(data:any)=>void;
   onEnd:(data:any)=>void;
 }
@@ -34,9 +35,39 @@ export default class CanvasManage {
       .append('canvas')
       .attr('width', this.contain.offsetWidth)
       .attr('height', this.contain.offsetHeight);
+    const canvas = this.canvas.node();
+    const  context = canvas.getContext('2d');
+    const  width = canvas.width;
+    const  height = canvas.height;
+
+    function drawLink(d) {
+      context.moveTo(d.source.x, d.source.y);
+      context.lineTo(d.target.x, d.target.y);
+    }
+    function drawNode(d) {
+      context.moveTo(d.x + 3, d.y);
+      context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+    }
+
+    const draw = this.option.showLogic
+      ? data => {
+          context.clearRect(0, 0, width, height);
+          context.beginPath();
+          data.links.forEach(drawLink);
+          context.strokeStyle = '#aaa';
+          context.stroke();
+
+          context.beginPath();
+          data.nodes.forEach(drawNode);
+          context.fill();
+          context.strokeStyle = '#fff';
+          context.stroke();
+        }
+      : () => {};
 
     const worker = new Worker();
     const ticked = (data) => {
+      draw(data);
       this.option.onTick && this.option.onTick(data);
     };
     const ended = data => {

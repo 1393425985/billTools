@@ -181,6 +181,36 @@ export default class SVGManage {
     this.option = _.cloneDeep(option);
     this.init();
   }
+  static IEV() {
+    const userAgent = navigator.userAgent;
+    const isIE =
+      userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1; //判断是否IE<11浏览器
+    const isEdge = userAgent.indexOf('Edge') > -1 && !isIE;
+    const isIE11 =
+      userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;
+    if (isIE) {
+      const reIE = new RegExp('MSIE (\\d+\\.\\d+);');
+      reIE.test(userAgent);
+      let fIEVersion = parseFloat(RegExp['$1']);
+      if (fIEVersion == 7) {
+        return 7;
+      } else if (fIEVersion == 8) {
+        return 8;
+      } else if (fIEVersion == 9) {
+        return 9;
+      } else if (fIEVersion == 10) {
+        return 10;
+      } else {
+        return 6;
+      }
+    } else if (isEdge) {
+      return 'edge';
+    } else if (isIE11) {
+      return 11;
+    } else {
+      return -1;
+    }
+  }
   static D3Option() {
     return {
       nodeSize: nodeBaseWidth,
@@ -509,6 +539,7 @@ export default class SVGManage {
       .attr('refY', 1)
       .attr('markerWidth', 4)
       .attr('markerHeight', 4)
+      .attr('stroke-width', 0)
       .attr('orient', 'auto')
       .append('path')
       .attr('d', 'M0,0 L0,2 L1,1 z')
@@ -652,6 +683,7 @@ export default class SVGManage {
 
   private initEvent() {
     const _this = this;
+    const isNotIe = SVGManage.IEV() === -1;
     const { events = {} } = this.option;
     const { onSelectedChange = () => {}, onClick = () => true } = events;
     const { lineType, nodeSize } = this.getD3Option();
@@ -819,12 +851,16 @@ export default class SVGManage {
     }
     function nodeHover(d, i) {
       showTooltip(d);
-      hadleNodesLinks(d.id, 'highLight');
+      if (isNotIe) {
+        hadleNodesLinks(d.id, 'highLight');
+      }
       _this.setOpacity();
     }
     function nodeNoHover(d, i) {
       hideTooltip(d);
-      hadleNodesLinks(d.id, 'unhighLight');
+      if (isNotIe) {
+        hadleNodesLinks(d.id, 'unhighLight');
+      }
 
       if (!_this.activeNodeIdSet.size) {
         _this.removeOpacity();
@@ -973,10 +1009,11 @@ export default class SVGManage {
             ),
           );
     this.selectByIds([]);
-     d3
-      .select('.linksWrap')
+    d3.select('.linksWrap')
       .selectAll(lineType)
-      .data([]).exit().remove();
+      .data([])
+      .exit()
+      .remove();
     if (!this.simulation) {
       this.initLinks(linksData);
       this.initEvent();
@@ -992,7 +1029,7 @@ export default class SVGManage {
       return;
     }
     const { lineType } = this.getD3Option();
-    
+
     const idSet = new Set(ids);
     this.option.data.links = this.option.data.links.filter(
       v => !idSet.has(v.id),

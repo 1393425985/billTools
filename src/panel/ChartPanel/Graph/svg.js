@@ -98,6 +98,41 @@ var SVGManage = /** @class */ (function () {
         this.option = lodash_1["default"].cloneDeep(option);
         this.init();
     }
+    SVGManage.IEV = function () {
+        var userAgent = navigator.userAgent;
+        var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1; //判断是否IE<11浏览器
+        var isEdge = userAgent.indexOf('Edge') > -1 && !isIE;
+        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;
+        if (isIE) {
+            var reIE = new RegExp('MSIE (\\d+\\.\\d+);');
+            reIE.test(userAgent);
+            var fIEVersion = parseFloat(RegExp['$1']);
+            if (fIEVersion == 7) {
+                return 7;
+            }
+            else if (fIEVersion == 8) {
+                return 8;
+            }
+            else if (fIEVersion == 9) {
+                return 9;
+            }
+            else if (fIEVersion == 10) {
+                return 10;
+            }
+            else {
+                return 6;
+            }
+        }
+        else if (isEdge) {
+            return 'edge';
+        }
+        else if (isIE11) {
+            return 11;
+        }
+        else {
+            return -1;
+        }
+    };
     SVGManage.D3Option = function () {
         return {
             nodeSize: nodeBaseWidth,
@@ -384,6 +419,7 @@ var SVGManage = /** @class */ (function () {
             .attr('refY', 1)
             .attr('markerWidth', 4)
             .attr('markerHeight', 4)
+            .attr('stroke-width', 0)
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M0,0 L0,2 L1,1 z')
@@ -432,7 +468,7 @@ var SVGManage = /** @class */ (function () {
                     d3.select(this).attr('transform', function (d) {
                         return 'translate(' + d.fx + ',' + d.fy + ')';
                     });
-                    var links = _this.svg.selectAll(".linksWrap .link");
+                    var links = _this.svg.selectAll(".link");
                     var createTargetPoint_1 = function (d2) {
                         var s = _this.nodeMap[d2.source.id];
                         var t = _this.nodeMap[d2.target.id];
@@ -492,6 +528,7 @@ var SVGManage = /** @class */ (function () {
     SVGManage.prototype.initEvent = function () {
         var _this_1 = this;
         var _this = this;
+        var isNotIe = SVGManage.IEV() === -1;
         var _a = this.option.events, events = _a === void 0 ? {} : _a;
         var _b = events.onSelectedChange, onSelectedChange = _b === void 0 ? function () { } : _b, _c = events.onClick, onClick = _c === void 0 ? function () { return true; } : _c;
         var _d = this.getD3Option(), lineType = _d.lineType, nodeSize = _d.nodeSize;
@@ -622,12 +659,16 @@ var SVGManage = /** @class */ (function () {
         }
         function nodeHover(d, i) {
             showTooltip(d);
-            hadleNodesLinks(d.id, 'highLight');
+            if (isNotIe) {
+                hadleNodesLinks(d.id, 'highLight');
+            }
             _this.setOpacity();
         }
         function nodeNoHover(d, i) {
             hideTooltip(d);
-            hadleNodesLinks(d.id, 'unhighLight');
+            if (isNotIe) {
+                hadleNodesLinks(d.id, 'unhighLight');
+            }
             if (!_this.activeNodeIdSet.size) {
                 _this.removeOpacity();
             }
@@ -713,8 +754,8 @@ var SVGManage = /** @class */ (function () {
     SVGManage.prototype.setOpacity = function () {
         var nodesWrap = this.svg.select('.nodesWrap');
         var linksWrap = this.svg.select('.linksWrap');
-        nodesWrap.attr('opacity', 0.1);
-        linksWrap.attr('opacity', 0.1);
+        nodesWrap.attr('opacity', 0.7);
+        linksWrap.attr('opacity', 0.7);
     };
     SVGManage.prototype.removeOpacity = function () {
         var nodesWrap = this.svg.select('.nodesWrap');
@@ -742,10 +783,11 @@ var SVGManage = /** @class */ (function () {
                 }));
             });
         this.selectByIds([]);
-        d3
-            .select('.linksWrap')
+        d3.select('.linksWrap')
             .selectAll(lineType)
-            .data([]).exit().remove();
+            .data([])
+            .exit()
+            .remove();
         if (!this.simulation) {
             this.initLinks(linksData);
             this.initEvent();
