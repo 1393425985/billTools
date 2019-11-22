@@ -36,7 +36,7 @@ const move_point_line_c = [
 ];
 
 interface SVGManageOption {
-  data: BezierTypes.bezierItem['info'];
+  data: IBezier.bezierItem['info'];
   onChange: (option: SVGManageOption) => void;
 }
 interface PointMoveData {
@@ -327,7 +327,7 @@ export default class SVGManage {
   }
   public updatePoint(
     index: number,
-    key: keyof BezierTypes.bezierItem['info'][0],
+    key: keyof IBezier.bezierItem['info'][0],
     value,
   ) {
     this.option.data[index][key] = value;

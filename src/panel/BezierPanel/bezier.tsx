@@ -13,7 +13,7 @@ const { clipboard } = remote;
 const styles = s as Partial<IBezierLess>;
 
 interface BezierStateProps {
-  bezier: BezierTypes.model;
+  bezier: IBezier.model;
 }
 interface BezierDispatchProps {
   dispatch: Dispatch;
@@ -23,7 +23,7 @@ type BezierModalProps = BezierStateProps & BezierDispatchProps & BezierOwnProps;
 
 interface BezierModalState {
   selectedIndex: number;
-  selectedItem: BezierTypes.bezierItem;
+  selectedItem: IBezier.bezierItem;
 }
 export class BezierModal extends Component<
   Partial<BezierModalProps>,
@@ -253,7 +253,7 @@ export class BezierModal extends Component<
   }
 }
 export default connect<BezierStateProps, BezierDispatchProps, BezierOwnProps>(
-  (state: ModelTypes.model) => ({
+  (state: ICache.model) => ({
     bezier: state.bezier,
   }),
   null,

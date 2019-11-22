@@ -212,7 +212,7 @@ export class ChartModal extends Component<
   }
 }
 export default connect<ChartStateProps, ChartDispatchProps, ChartOwnProps>(
-  (state: ModelTypes.model) => ({}),
+  (state: ICache.model) => ({}),
   null,
   null,
   { forwardRef: true },

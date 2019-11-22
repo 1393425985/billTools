@@ -15,7 +15,7 @@ const primaryMinSaturation = 70; // 主色推荐最小饱和度
 const primaryMinBrightness = 70; // 主色推荐最小亮度
 
 interface ColorStateProps {
-  color: ModelTypes.model['color'];
+  color: ICache.model['color'];
 }
 interface ColorDispatchProps {
   dispatch: Dispatch;
@@ -25,7 +25,7 @@ type ColorModalProps = ColorStateProps & ColorDispatchProps & ColorOwnProps;
 
 interface ColorModalState {
   selectedIndex: number;
-  selectedItem: ColorTypes.colorItem;
+  selectedItem: IColor.colorItem;
   primaryColorInstance: {
     hsv: {
       s: number;
@@ -212,7 +212,7 @@ export class ColorModal extends Component<
   }
 }
 export default connect<ColorStateProps, ColorDispatchProps, ColorOwnProps>(
-  (state: ModelTypes.model) => ({
+  (state: ICache.model) => ({
     color: state.color,
   }),
   null,

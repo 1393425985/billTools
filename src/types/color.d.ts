@@ -1,4 +1,4 @@
-declare namespace ColorTypes {
-  export type model = ModelTypes.model['color'];
-  export type colorItem = ModelTypes.colorItem;
+declare namespace IColor {
+  export type model = ICache.model['color'];
+  export type colorItem = ICache.colorItem;
 }

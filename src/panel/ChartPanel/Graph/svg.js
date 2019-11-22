@@ -6,7 +6,7 @@ var nodeBaseWidth = 6;
 var tempNearXY = {};
 function createNearXY(x, y, tx, ty, r, r2, isClear) {
     if (isClear === void 0) { isClear = false; }
-    var tr = r2 + 1;
+    var tr = r2 + 3;
     var key = x.toFixed(1) + "-" + y.toFixed(1) + "-" + tx.toFixed(1) + "-" + ty.toFixed(1) + "-" + r.toFixed(1) + "-" + tr.toFixed(1);
     var rs;
     if (key in tempNearXY) {
@@ -375,7 +375,7 @@ var SVGManage = /** @class */ (function () {
             .style('font-size', '8px')
             .attr('dx', function (d) { return _this_1.getScale(d) * nodeSize + 3; });
         nodes
-            .filter(function (d) { return (d.isFault || d.isEnergy) && (d.bgText && d.bgText !== ''); })
+            .filter(function (d) { return (d.isFault || d.isEnergy) && d.bgText && d.bgText !== ''; })
             .append('text')
             .attr('text-anchor', 'middle')
             .attr('dy', '0.35em')
@@ -414,15 +414,15 @@ var SVGManage = /** @class */ (function () {
             .append('marker')
             .attr('id', color.replace('#', ''))
             .attr('markerUnits', 'strokeWidth')
-            .attr('viewBox', '0 0 4 4')
-            .attr('refX', 0)
-            .attr('refY', 1)
-            .attr('markerWidth', 4)
-            .attr('markerHeight', 4)
+            .attr('viewBox', '0 0 20 20')
+            .attr('refX', 5)
+            .attr('refY', 5)
+            .attr('markerWidth', 5)
+            .attr('markerHeight', 5)
             .attr('stroke-width', 0)
             .attr('orient', 'auto')
             .append('path')
-            .attr('d', 'M0,0 L0,2 L1,1 z')
+            .attr('d', 'M5,5 L0,10 L10,5 L0,0 L5,5')
             .style('fill', color);
         var rs = 'url(' + color + ')';
         this.arrowMap[color] = rs;
@@ -578,13 +578,28 @@ var SVGManage = /** @class */ (function () {
                 hadleNodesLinks(d.id, 'unhighLight');
             }
         })
-            .on('highLight', function () {
-            var target = d3.select(this).remove();
+            .on('highLight', function (d) {
+            var t = d3.select(this);
+            if (d.name == '' && d._name) {
+                t.append('text')
+                    .attr('class', 'highLightText')
+                    .attr('dy', '0.35em')
+                    .text(d._name)
+                    .attr('opacity', 0.8)
+                    .attr('pointer-events', 'none')
+                    .style('font-size', '8px')
+                    .attr('dx', function (d2) {
+                    return _this.getScale(d2) * nodeSize + 3;
+                });
+            }
+            var target = t.remove();
             target.select('.dragBg').attr('opacity', 1);
             activeNodesWrap.append(function () { return target.node(); });
         })
-            .on('unhighLight', function () {
-            var target = d3.select(this).remove();
+            .on('unhighLight', function (d) {
+            var t = d3.select(this);
+            t.select('.highLightText').remove();
+            var target = t.remove();
             target.select('.dragBg').attr('opacity', _this.getOpacity);
             nodesWrap.append(function () { return target.node(); });
         })
@@ -595,7 +610,7 @@ var SVGManage = /** @class */ (function () {
                 .select(this)
                 .remove()
                 .attr('opacity', 1)
-                .attr('stroke-width', 4);
+                .attr('stroke-width', 2);
             activeLinksWrap.append(function () { return target.node(); });
         })
             .on('unhighLight', function () {

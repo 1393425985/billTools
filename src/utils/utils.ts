@@ -4,8 +4,8 @@ const fs = require('fs');
 import { CONFIG_PATH } from './enum';
 
 export const writeConfig: (
-  config: Partial<ModelTypes.model>,
-) => Promise<Partial<ModelTypes.model>> = async function(config) {
+  config: Partial<ICache.model>,
+) => Promise<Partial<ICache.model>> = async function(config) {
   return new Promise(async (resolve, reject) => {
     let oldConfig = await getConfig();
     const newConfig = Object.assign(oldConfig || {}, config);
@@ -19,7 +19,7 @@ export const writeConfig: (
     });
   });
 };
-export const getConfig: () => Promise<ModelTypes.model> = async function() {
+export const getConfig: () => Promise<ICache.model> = async function() {
   return new Promise((resolve, reject) => {
     fs.exists(CONFIG_PATH, async isE => {
       if (isE) {

@@ -1,7 +1,12 @@
 const NAMESPACE = 'user';
-const initialState = {
-  info: {},
-  loginStatus: {},
+const initialState: IUser.Model = {
+  info: undefined,
+  loginInfo: {
+    status: false,
+    msg: '',
+  },
+  collapsed: false,
+  isOnline: navigator.onLine
 };
 const ACTION_HANDLERS = {
   update(state, action) {
@@ -10,8 +15,8 @@ const ACTION_HANDLERS = {
   changeInfo(state, action) {
     return { ...state, info: action.payload };
   },
-  changeLoginStatus(state, action) {
-    return { ...state, loginStatus: action.payload };
+  changeLoginInfo(state, action) {
+    return { ...state, loginInfo: action.payload };
   },
 };
 export default function appreducer(state = initialState, action) {

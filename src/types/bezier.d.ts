@@ -1,4 +1,4 @@
-declare namespace BezierTypes {
-  export type model = ModelTypes.model['bezier'];
-  export type bezierItem = ModelTypes.bezierItem;
+declare namespace IBezier {
+  export type model = ICache.model['bezier'];
+  export type bezierItem = ICache.bezierItem;
 }

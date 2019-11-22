@@ -1,6 +1,6 @@
 import {writeConfig} from '@utils/utils';
 const NAMESPACE = 'project';
-const initialState: ProjectTypes.model = {
+const initialState: IProject.model = {
   packageCode: 'yarn',
   svnDays: 7,
   patchPath: undefined,

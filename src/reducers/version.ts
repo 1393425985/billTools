@@ -1,5 +1,5 @@
 const NAMESPACE = 'version';
-const initialState: VersionTypes.model = {
+const initialState: IVersion.model = {
   step: 0,
   progress: undefined,
 };

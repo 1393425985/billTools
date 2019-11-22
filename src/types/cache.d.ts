@@ -1,4 +1,4 @@
-declare namespace ModelTypes {
+declare namespace ICache {
   export interface projectItem {
     name: string;
     type: 'npm' | 'folder';
@@ -38,4 +38,10 @@ declare namespace ModelTypes {
       list: bezierItem[];
     };
   }
+  export interface config {
+    creator: IUser.UserInfo['id'];
+    type: 'config';
+    data: Partial<model>;
+  }
+  export type getConfigRs = IG.RS<config>;
 }

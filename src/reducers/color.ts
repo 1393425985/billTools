@@ -20,7 +20,7 @@ const temp = [
   '#795548',
   '#607D8B',
 ];
-const initialState: ColorTypes.model = {
+const initialState: IColor.model = {
   list: [
     { color: '#f5222d', name: '薄暮' },
     { color: '#fa541c', name: '火山' },

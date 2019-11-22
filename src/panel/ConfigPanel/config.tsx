@@ -16,8 +16,8 @@ const styles = s as Partial<IConfigLess>;
 
 
 interface ConfigStateProps {
-  project: ModelTypes.model['project'];
-  version: ModelTypes.model['version'];
+  project: ICache.model['project'];
+  version: ICache.model['version'];
 }
 interface ConfigDispatchProps {
   dispatch: Dispatch;
@@ -147,7 +147,7 @@ export class ConfigModal extends Component<
   }
 }
 export default connect<ConfigStateProps, ConfigDispatchProps, ConfigOwnProps>(
-  (state: ModelTypes.model) => ({
+  (state: ICache.model) => ({
     project: state.project,
     version: state.version
   }),

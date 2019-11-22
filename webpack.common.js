@@ -21,6 +21,8 @@ module.exports = {
       '@components': path.resolve(__dirname, './src/components'),
       '@panel': path.resolve(__dirname, './src/panel'),
       '@services': path.resolve(__dirname, './src/services'),
+      '@layouts': path.resolve(__dirname, './src/layouts'),
+      '@assets': path.resolve(__dirname, './src/assets'),
     },
   },
   // externals: {

@@ -1,0 +1,55 @@
+@import '~antd/lib/style/themes/default.less';
+.wrap {
+  width: 368px;
+  margin: 0 auto;
+  .right {
+    float: right;
+  }
+  :global(.has-error) :global(.ant-form-explain) {
+    mix-blend-mode: difference;
+  }
+  .icon {
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.2);
+    margin-left: 16px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+
+  .other {
+    text-align: left;
+    margin-top: 24px;
+    line-height: 22px;
+
+    .register {
+      float: right;
+    }
+  }
+  .prefixIcon {
+    font-size: @font-size-base;
+    color: @disabled-color;
+  }
+
+  .getCaptcha {
+    display: block;
+    width: 100%;
+  }
+
+  .submit {
+    width: 100%;
+    margin-top: 24px;
+  }
+}
+@supports (mix-blend-mode: difference) {
+  .differenceText {
+    mix-blend-mode: difference;
+  }
+  .darkenText {
+    mix-blend-mode: darken;
+  }
+}

@@ -20,19 +20,30 @@ module.exports = merge(common, {
     filename: '[name].[hash].js',
     path: path.resolve(__dirname, 'build/dist'),
     globalObject:'this',
+    publicPath: '/build/dist',
   },
   // devtool: 'inline-source-map',
   devtool: 'eval',
 
   devServer: {
-    contentBase: '.build/dist',
+    contentBase: './build/dist',
     compress: true,
     port: 9000,
     host: 'localhost',
     hot: true,
-    proxy: {
-      '/**': 'http://localhost',
+    disableHostCheck: true,
+    historyApiFallback: {
+      verbose: true,
+      rewrites: [
+        {
+          from: /.*/g,
+          to: '/build/dist/index.html',
+        },
+      ],
     },
+    // proxy: {
+    //   '/api/**': 'http://47.101.51.134',
+    // },
   },
   resolve: {
     alias: {

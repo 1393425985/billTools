@@ -3,3 +3,4 @@ export { default as color } from './color';
 export { default as bezier } from './bezier';
 export { default as version } from './version';
 export { default as loading } from './loading';
+export { default as user } from './user';

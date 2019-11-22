@@ -1,4 +1,4 @@
-declare namespace ProjectTypes {
-  export type model = ModelTypes.model['project'];
-  export type projectItem = ModelTypes.projectItem;
+declare namespace IProject {
+  export type model = ICache.model['project'];
+  export type projectItem = ICache.projectItem;
 }

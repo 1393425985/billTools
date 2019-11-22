@@ -1,3 +1,14 @@
+import { notification } from 'antd';
+import history from '@utils/history';
+
+function getToken() {
+  const tokenInfo = localStorage.getItem('token');
+  if (tokenInfo) {
+    const info: IUser.TokenInfo = JSON.parse(tokenInfo);
+    return info.token;
+  }
+  return undefined;
+}
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -20,15 +31,13 @@ function checkStatus(response) {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
-  // TODO 提示错误
-  alert(errortext);
-  // notification.error({
-  //   message: `请求错误 ${response.status}: ${response.url}`,
-  //   description: errortext,
-  // });
+  notification.error({
+    message: `请求错误 ${response.status}: ${response.url}`,
+    description: errortext,
+  });
   const error = new Error(errortext);
   error.name = response.status;
-  error.response = response;
+  // error.response = response;
   throw error;
 }
 
@@ -39,11 +48,25 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
+export default function request(url: string, options: any = {}) {
   const defaultOptions = {
-    credentials: 'include',
+    // credentials: 'include',
+    method: 'GET',
+    body: undefined,
+    headers: undefined,
   };
-  const newOptions = Object.assign({},defaultOptions,options);
+  const newOptions = {
+    ...defaultOptions,
+    ...options,
+    ...{
+      headers: Object.assign(
+        {
+          Authorization: `Bearer ${getToken()}`,
+        },
+        (options || {}).headers || {},
+      ),
+    },
+  };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
@@ -61,8 +84,9 @@ export default function request(url, options) {
       };
     }
   }
-
-  return fetch(url, newOptions)
+  let hostMain = 'http://47.101.51.134';
+  // hostMain = 'http://localhost:3000';
+  return fetch(url.startsWith('/api') ? `${hostMain}${url}` : url, newOptions)
     .then(checkStatus)
     .then(response => {
       if (newOptions.method === 'DELETE' || response.status === 204) {
@@ -73,19 +97,20 @@ export default function request(url, options) {
     .catch(e => {
       const status = e.name;
       if (status === 401) {
-        // TODO 页面跳转 登录页
+        // 注销
+        history.push('/user/login');
         return;
       }
       if (status === 403) {
-        // TODO 页面跳转 403
+        // history.push('/exception/403');
         return;
       }
       if (status <= 504 && status >= 500) {
-        // TODO 页面跳转 500
+        // history.push('/exception/500');
         return;
       }
       if (status >= 404 && status < 422) {
-        // TODO 页面跳转 404
+        // history.push('/exception/404');
       }
     });
 }

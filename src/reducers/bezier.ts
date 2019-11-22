@@ -1,6 +1,6 @@
 import { writeConfig } from '@utils/utils';
 const NAMESPACE = 'bezier';
-const initialState: BezierTypes.model = {
+const initialState: IBezier.model = {
   list: new Array(9).fill(0).map((v, i) => ({
     name: `default_${i + 1}`,
     info: [],

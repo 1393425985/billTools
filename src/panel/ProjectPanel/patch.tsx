@@ -32,7 +32,7 @@ const onError = data => {
   });
 };
 interface PatchStateProps {
-  project: ModelTypes.model['project'];
+  project: ICache.model['project'];
 }
 interface PatchDispatchProps {
   dispatch: Dispatch;
@@ -599,7 +599,7 @@ export class PatchModal extends Component<
   }
 }
 export default connect<PatchStateProps, PatchDispatchProps, PatchOwnProps>(
-  (state: ModelTypes.model) => ({
+  (state: ICache.model) => ({
     project: state.project,
   }),
   null,

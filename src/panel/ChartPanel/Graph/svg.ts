@@ -112,6 +112,7 @@ export interface SVGManageOption {
       bgText?: string;
       bgTextColor?: string;
       name?: string;
+      _name?: string;
       color?: string;
       opacity?: number;
       scale?: number;
@@ -495,7 +496,7 @@ export default class SVGManage {
       .style('font-size', '8px')
       .attr('dx', d => this.getScale(d) * nodeSize + 3);
     nodes
-      .filter(d => (d.isFault || d.isEnergy) && (d.bgText && d.bgText !== ''))
+      .filter(d => (d.isFault || d.isEnergy) && d.bgText && d.bgText !== '')
       .append('text')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
@@ -534,15 +535,15 @@ export default class SVGManage {
       .append('marker')
       .attr('id', color.replace('#', ''))
       .attr('markerUnits', 'strokeWidth')
-      .attr('viewBox', '0 0 4 4')
-      .attr('refX', 0)
-      .attr('refY', 1)
-      .attr('markerWidth', 4)
-      .attr('markerHeight', 4)
+      .attr('viewBox', '0 0 20 20')
+      .attr('refX', 5)
+      .attr('refY', 5)
+      .attr('markerWidth', 5)
+      .attr('markerHeight', 5)
       .attr('stroke-width', 0)
       .attr('orient', 'auto')
       .append('path')
-      .attr('d', 'M0,0 L0,2 L1,1 z')
+      .attr('d', 'M5,5 L0,10 L10,5 L0,0 L5,5')
       .style('fill', color);
 
     const rs = 'url(' + color + ')';
@@ -744,13 +745,38 @@ export default class SVGManage {
           hadleNodesLinks(d.id, 'unhighLight');
         }
       })
-      .on('highLight', function() {
-        const target = d3.select(this).remove();
+      .on('highLight', function(d) {
+        const t = d3.select(this) as d3.Selection<
+          SVGGElement,
+          NodeData,
+          SVGGElement,
+          unknown
+        >;
+        if (d.name == '' && d._name) {
+          t.append('text')
+            .attr('class', 'highLightText')
+            .attr('dy', '0.35em')
+            .text(d._name)
+            .attr('opacity', 0.8)
+            .attr('pointer-events', 'none')
+            .style('font-size', '8px')
+            .attr('dx', function(d2) {
+              return _this.getScale(d2) * nodeSize + 3;
+            });
+        }
+        const target = t.remove();
         target.select('.dragBg').attr('opacity', 1);
         activeNodesWrap.append(() => target.node());
       })
-      .on('unhighLight', function() {
-        const target = d3.select(this).remove();
+      .on('unhighLight', function(d) {
+        const t = d3.select(this) as d3.Selection<
+          SVGGElement,
+          NodeData,
+          SVGGElement,
+          unknown
+        >;
+        t.selectAll('.highLightText').remove();
+        const target = t.remove();
         target.select('.dragBg').attr('opacity', _this.getOpacity);
         nodesWrap.append(() => target.node());
       })
@@ -761,7 +787,7 @@ export default class SVGManage {
           .select(this)
           .remove()
           .attr('opacity', 1)
-          .attr('stroke-width', 4);
+          .attr('stroke-width', 2);
         activeLinksWrap.append(() => target.node());
       })
       .on('unhighLight', function() {

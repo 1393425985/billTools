@@ -4,6 +4,7 @@ const {
   globalShortcut,
   dialog,
   ipcMain,
+  Menu
 } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const request = require('request');
@@ -42,11 +43,13 @@ let mainWindow;
 let loadingScreen;
 
 function createWindow() {
+  Menu.setApplicationMenu(null)
   mainWindow = new BrowserWindow(mainParams);
   mainWindow.setTitle(pkg.name);
 
   // mainWindow.loadURL(`http://localhost:9000`);
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
+  // app.commandLine.appendSwitch('proxy-server', 'http://47.101.51.134');
   mainWindow.loadFile('dist/index.html');
 
   // mainWindow.once('ready-to-show');

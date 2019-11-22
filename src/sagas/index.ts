@@ -12,6 +12,7 @@ import {
 } from 'redux-saga/effects';
 
 import * as projSaga from './project';
+import * as userSaga from './user';
 
 function* watchLog() {
   while (true) {
@@ -25,5 +26,5 @@ function* watchLog() {
 }
 
 export default function* rootSaga() {
-  yield all([watchLog(),...Object.keys(projSaga).map(k=>projSaga[k]())]);
+  yield all([watchLog(),...Object.keys(projSaga).map(k=>projSaga[k]()),...Object.keys(userSaga).map(k=>userSaga[k]())]);
 }

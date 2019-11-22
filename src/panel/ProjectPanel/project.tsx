@@ -41,7 +41,7 @@ enum AddType {
 
 interface ProjectProps {
   dispatch: Dispatch;
-  project: ModelTypes.model['project'];
+  project: ICache.model['project'];
 }
 interface ProjectState {
   search: string;
@@ -65,7 +65,7 @@ class Project extends Component<ProjectProps, ProjectState> {
           } = this.props;
           const newList = list.concat();
           const targetPath = fileNames[0];
-          const readPackage = (targetPath): Promise<ModelTypes.projectItem> => {
+          const readPackage = (targetPath): Promise<ICache.projectItem> => {
             const nameArr = path.normalize(targetPath).split(path.sep);
             const name = nameArr[nameArr.length - 1];
             return new Promise((resolve, reject) => {
@@ -117,7 +117,7 @@ class Project extends Component<ProjectProps, ProjectState> {
             case AddType.扫描:
               packageFiles = glob.sync(path.join(targetPath, '*'));
               if (packageFiles.length) {
-                const arr: Promise<ModelTypes.projectItem>[] = packageFiles
+                const arr: Promise<ICache.projectItem>[] = packageFiles
                   .filter(filedir => {
                     const stat = fs.lstatSync(filedir);
                     return stat.isDirectory();
@@ -501,6 +501,6 @@ class Project extends Component<ProjectProps, ProjectState> {
   }
 }
 
-export default connect((state: ModelTypes.model) => ({
+export default connect((state: ICache.model) => ({
   project: state.project,
 }))(Project);

@@ -1,4 +1,4 @@
-declare namespace VersionTypes {
-    export type model = ModelTypes.model['version'];
+declare namespace IVersion {
+    export type model = ICache.model['version'];
   }
   

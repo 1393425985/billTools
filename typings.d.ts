@@ -2,6 +2,7 @@ declare module '*.css';
 declare module "*.png";
 declare module "*.less";
 declare module "*.json";
+declare module "*.svg";
 
 declare module "file-loader?name=[name].js!*" {
     const value: string;

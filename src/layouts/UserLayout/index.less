@@ -1,0 +1,63 @@
+@import '~antd/lib/style/themes/default.less';
+.wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 112px 0 24px;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+
+  .top {
+    text-align: center;
+    .header {
+      height: 44px;
+      line-height: 44px;
+      a {
+        display: flex;
+        justify-content: center;
+        text-decoration: none;
+        height: 44px;
+        line-height: 44px;
+      }
+      .logo {
+        vertical-align: top;
+        margin-right: 16px;
+        color: #fff;
+        background: #00a2ae;
+      }
+
+      .title {
+        font-size: 33px;
+        // color: #fff;
+        color: @heading-color;
+        font-family: 'Exo', sans-serif;
+        font-weight: 600;
+        position: relative;
+        top: 2px;
+      }
+    }
+    .desc {
+      font-size: @font-size-base;
+      color: @text-color-secondary;
+      margin-top: 12px;
+      margin-bottom: 40px;
+    }
+  }
+}
+@supports (mix-blend-mode: darken) {
+  .lightText {
+    mix-blend-mode: darken;
+  }
+}
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
