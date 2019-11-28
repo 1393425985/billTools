@@ -3,9 +3,9 @@ import { connect, DispatchProp } from 'react-redux';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
 import classNames from 'classnames';
+import ImageControl from '@utils/img';
 import GlobalHeader from '@components/GlobalHeader';
 import SiderMenu from '@components/SiderMenu';
-import logo from '@assets/logo.svg';
 import ProjectPanel from '@panel/ProjectPanel';
 import ColorPanel from '@panel/ColorPanel';
 import BezierPanel from '@panel/BezierPanel';
@@ -88,14 +88,22 @@ class BaseLayout extends React.PureComponent<
       payload: collapsed,
     });
   };
-  private handleMenuClick = ({ key }) => {};
+  private handleMenuClick = ({ key }) => {
+    switch (key) {
+      case 'logout':
+        this.props.dispatch({
+          type: 'saga/user/logout',
+        });
+        break;
+    }
+  };
   render() {
     const { userStore, location, match } = this.props;
     const { collapsed, info, isOnline } = userStore;
     const layout = info ? (
       <Layout style={{ width: '100%', height: '100%' }}>
         <SiderMenu
-          logo={logo}
+          logo={ImageControl.getAvatar('5d5d0c5e18de021b640fe14b')}
           menuData={getMenuData().filter(v => (isOnline ? true : v.offline))}
           collapsed={collapsed}
           location={location}
@@ -105,7 +113,7 @@ class BaseLayout extends React.PureComponent<
         <Layout>
           <Header style={{ padding: 0 }}>
             <GlobalHeader
-              logo={logo}
+              logo={ImageControl.getAvatar(info.id)}
               currentUser={info}
               collapsed={collapsed}
               isMobile={false}

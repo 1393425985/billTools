@@ -2,9 +2,9 @@ import React from 'react';
 import { Icon, Avatar } from 'antd';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import classnames from 'classnames';
+import ImageControl from '@utils/img';
 import Login from '@panel/User/Login';
 import Register from '@panel/User/Register';
-import logo from '@assets/logo.svg';
 import s, { IIndexLess } from './index.less';
 const styles = s as Partial<IIndexLess>;
 export interface IUserLayoutProps {
@@ -26,11 +26,17 @@ export default function(props: IUserLayoutProps) {
       <div className={styles.top}>
         <div className={styles.header}>
           <Link to="/">
-            <img src={logo} alt="logo" width="32" />
-            <span className={classnames(styles.title,styles.lightText)}>Management</span>
+            <img
+              src={ImageControl.getAvatar('5d5d0c5e18de021b640fe14b')}
+              alt="logo"
+              width="32"
+            />
+            <span className={classnames(styles.title, styles.lightText)}>
+              Management
+            </span>
           </Link>
         </div>
-        <div className={classnames(styles.desc,styles.lightText)}>By Bill</div>
+        <div className={classnames(styles.desc, styles.lightText)}>By Bill</div>
       </div>
       <Switch>
         <Route path="/user/login" component={Login} exact />

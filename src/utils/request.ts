@@ -1,4 +1,5 @@
 import { notification } from 'antd';
+import * as config from '@utils/config'
 import history from '@utils/history';
 
 function getToken() {
@@ -84,7 +85,7 @@ export default function request(url: string, options: any = {}) {
       };
     }
   }
-  let hostMain = 'http://47.101.51.134';
+  let hostMain = config.host;
   // hostMain = 'http://localhost:3000';
   return fetch(url.startsWith('/api') ? `${hostMain}${url}` : url, newOptions)
     .then(checkStatus)

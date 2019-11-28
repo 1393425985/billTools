@@ -38,6 +38,3 @@ export async function updateConfigCatch(
     },
   });
 }
-export async function logout(code) {
-  return request(`/api/${code}`);
-}

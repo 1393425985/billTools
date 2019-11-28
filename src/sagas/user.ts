@@ -30,7 +30,7 @@ function* login(
     yield put({ type: 'loading/open', name: NAME('login') });
     const rs: IUser.LoginRs = yield call(userAPI.login, payload);
     if (rs.success) {
-      yield put({ type: 'user/changeInfo', payload: rs.data });
+      yield put({ type: 'user/changeInfo', payload: rs.data.info });
       yield put({
         type: 'user/changeLoginInfo',
         payload: { status: true, msg: '' },
@@ -86,9 +86,10 @@ function* login(
 }
 function* logout(payload) {
   yield put({ type: 'saga/user/updateConfig' });
-  yield fork(userAPI.logout, payload);
   yield put({ type: 'user/changeInfo', payload: {} });
   yield put({ type: 'user/changeLoginStatus', payload: {} });
+  localStorage.removeItem('token');
+  history.push('/user/login');
 }
 function* loginLast() {
   const tokenInfo = localStorage.getItem('token');
@@ -175,6 +176,9 @@ export function* watchLogin() {
 }
 export function* watchLoginLast() {
   yield takeEvery(NAME('loginLast'), loginLast);
+}
+export function* watchLogout() {
+  yield takeEvery(NAME('logout'), logout);
 }
 export function* watchCollapsed() {
   yield takeLatest(NAME('changeCollapsed'), changeCollapsed);
