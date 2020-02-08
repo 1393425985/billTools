@@ -29,7 +29,7 @@ export default function(props: IUserLayoutProps) {
             <img
               src={ImageControl.getAvatar('5d5d0c5e18de021b640fe14b')}
               alt="logo"
-              width="32"
+              width="44"
             />
             <span className={classnames(styles.title, styles.lightText)}>
               Management
