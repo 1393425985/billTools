@@ -6,7 +6,7 @@ var nodeBaseWidth = 6;
 var tempNearXY = {};
 function createNearXY(x, y, tx, ty, r, r2, isClear) {
     if (isClear === void 0) { isClear = false; }
-    var tr = r2 + 3;
+    var tr = r2 + 1;
     var key = x.toFixed(1) + "-" + y.toFixed(1) + "-" + tx.toFixed(1) + "-" + ty.toFixed(1) + "-" + r.toFixed(1) + "-" + tr.toFixed(1);
     var rs;
     if (key in tempNearXY) {
@@ -371,8 +371,9 @@ var SVGManage = /** @class */ (function () {
             .attr('dy', '0.35em')
             .text(function (d) { return d.name; })
             .attr('opacity', 0.8)
+            .attr('fill', this.getTextColor)
             .attr('pointer-events', 'none')
-            .style('font-size', '8px')
+            .style('font-size', '6px')
             .attr('dx', function (d) { return _this_1.getScale(d) * nodeSize + 3; });
         nodes
             .filter(function (d) { return (d.isFault || d.isEnergy) && d.bgText && d.bgText !== ''; })
@@ -404,6 +405,9 @@ var SVGManage = /** @class */ (function () {
     };
     SVGManage.prototype.getBgTextColor = function (d) {
         return d.bgTextColor || '#fff';
+    };
+    SVGManage.prototype.getTextColor = function (d) {
+        return d.textColor || '#8e8e8e';
     };
     SVGManage.prototype.getArrow = function (color) {
         if (color in this.arrowMap) {
@@ -598,7 +602,7 @@ var SVGManage = /** @class */ (function () {
         })
             .on('unhighLight', function (d) {
             var t = d3.select(this);
-            t.select('.highLightText').remove();
+            t.selectAll('.highLightText').remove();
             var target = t.remove();
             target.select('.dragBg').attr('opacity', _this.getOpacity);
             nodesWrap.append(function () { return target.node(); });

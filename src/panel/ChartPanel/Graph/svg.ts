@@ -111,6 +111,7 @@ export interface SVGManageOption {
       isEnergy?: boolean;
       bgText?: string;
       bgTextColor?: string;
+      textColor?: string;
       name?: string;
       _name?: string;
       color?: string;
@@ -489,11 +490,13 @@ export default class SVGManage {
     nodes
       .filter(d => d.name && d.name !== '')
       .append('text')
+      .attr('class', 'text')
       .attr('dy', '0.35em')
       .text(d => d.name)
       .attr('opacity', 0.8)
+      .attr('fill', this.getTextColor)
       .attr('pointer-events', 'none')
-      .style('font-size', '8px')
+      .style('font-size', '6px')
       .attr('dx', d => this.getScale(d) * nodeSize + 3);
     nodes
       .filter(d => (d.isFault || d.isEnergy) && d.bgText && d.bgText !== '')
@@ -525,6 +528,9 @@ export default class SVGManage {
   }
   private getBgTextColor(d: NodeData) {
     return d.bgTextColor || '#fff';
+  }
+  private getTextColor(d: NodeData) {
+    return d.textColor || '#191e29';
   }
   private getArrow(color: string) {
     if (color in this.arrowMap) {
@@ -758,14 +764,16 @@ export default class SVGManage {
             .attr('dy', '0.35em')
             .text(d._name)
             .attr('opacity', 0.8)
+            .attr('fill', _this.getTextColor)
             .attr('pointer-events', 'none')
-            .style('font-size', '8px')
+            .style('font-size', '6px')
             .attr('dx', function(d2) {
               return _this.getScale(d2) * nodeSize + 3;
             });
         }
         const target = t.remove();
         target.select('.dragBg').attr('opacity', 1);
+        target.select('.text').attr('opacity', 1);
         activeNodesWrap.append(() => target.node());
       })
       .on('unhighLight', function(d) {
@@ -778,6 +786,7 @@ export default class SVGManage {
         t.selectAll('.highLightText').remove();
         const target = t.remove();
         target.select('.dragBg').attr('opacity', _this.getOpacity);
+        target.select('.text').attr('opacity', _this.getOpacity);
         nodesWrap.append(() => target.node());
       })
       .on('showInCenter', showInCenter);
@@ -1002,8 +1011,8 @@ export default class SVGManage {
   private setOpacity() {
     const nodesWrap = this.svg.select('.nodesWrap');
     const linksWrap = this.svg.select('.linksWrap');
-    nodesWrap.attr('opacity', 0.7);
-    linksWrap.attr('opacity', 0.7);
+    nodesWrap.attr('opacity', 0.4);
+    linksWrap.attr('opacity', 0.4);
   }
   private removeOpacity() {
     const nodesWrap = this.svg.select('.nodesWrap');
